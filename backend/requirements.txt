@@ -11,5 +11,3 @@ redis
 pydantic-settings
 email-validator
 bcrypt==4.0.1
-celery
-redis

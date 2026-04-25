@@ -1,16 +1,35 @@
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
 
-# Virtual env
+# Virtual environments
 .venv/
-
-# Env
+venv/
+env/
+backend/.venv/
+backend/.env
+.venv/
 .env
+# Environment variables
+.env
+.env.*
 
 # Logs
 logs/
+*.log
 
-# OS
+# OS / IDE
 .DS_Store
 Thumbs.db
+.vscode/
+.idea/
+
+# Test/cache
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Docker/local db
+*.sqlite3
+*.db
