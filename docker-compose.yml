@@ -1,0 +1,43 @@
+services:
+  db:
+    image: postgres:16
+    container_name: smart_finance_db
+    environment:
+      POSTGRES_DB: finance_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    volumes:
+      - finance_postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: smart_finance_redis
+
+  web:
+    build: ./backend
+    container_name: smart_finance_web
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - db
+      - redis
+
+  celery:
+    build: ./backend
+    container_name: smart_finance_celery
+    command: celery -A app.tasks.celery_app.celery_app worker --loglevel=info
+    volumes:
+      - ./backend:/app
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - redis
+      - db
+
+volumes:
+  finance_postgres_data:
