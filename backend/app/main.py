@@ -6,10 +6,19 @@ from app.core.dependencies import get_db
 from app.models import user, category, transaction
 from app.routers import auth, categories, transactions, forecast
 from app.routers import analytics
+from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI(
     title="Smart Finance API",
     description="API for personal finance management and expense forecasting",
     version="0.1.0",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(auth.router)

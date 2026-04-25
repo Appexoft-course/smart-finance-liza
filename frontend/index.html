@@ -2,49 +2,95 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Smart Finance</title>
+    <title>Smart Finance Pro</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="container">
-    <h1>Smart Finance</h1>
-    <p>Personal finance dashboard</p>
+<div class="app">
+    <aside class="sidebar">
+        <h1>Finance Pro</h1>
+        <p class="subtitle">Smart Finance API</p>
 
-    <section class="card">
-        <h2>Login</h2>
-        <input id="username" placeholder="Username">
-        <input id="email" placeholder="Email">
-        <input id="password" type="password" placeholder="Password">
-        <button onclick="login()">Login</button>
-        <p id="loginResult"></p>
-    </section>
+        <nav>
+            <a href="#auth">🔐 Авторизація</a>
+            <a href="#categories">📂 Категорії</a>
+            <a href="#transactions">💳 Транзакції</a>
+            <a href="#list">📄 Список</a>
+            <a href="#analytics">📊 Аналітика</a>
+            <a href="#forecast">🤖 Прогноз</a>
+        </nav>
 
-    <section class="card">
-        <h2>Create Category</h2>
-        <input id="categoryName" placeholder="Category name">
-        <button onclick="createCategory()">Create</button>
-    </section>
+        <div class="token-box">
+            <p>Статус:</p>
+            <strong id="authStatus">Не авторизовано</strong>
+        </div>
+    </aside>
 
-    <section class="card">
-        <h2>Create Transaction</h2>
-        <input id="title" placeholder="Title">
-        <input id="amount" type="number" placeholder="Amount">
-        <input id="type" placeholder="income / expense">
-        <input id="categoryId" type="number" placeholder="Category ID">
-        <button onclick="createTransaction()">Create</button>
-    </section>
+    <main class="content">
+        <section class="hero">
+            <h2>Smart Finance Dashboard</h2>
+            <p>Особисті фінанси, транзакції, аналітика та прогноз витрат</p>
+        </section>
 
-    <section class="card">
-        <h2>Transactions</h2>
-        <button onclick="getTransactions()">Load transactions</button>
-        <pre id="transactions"></pre>
-    </section>
+        <section class="card" id="auth">
+            <h3>🔐 Авторизація</h3>
+            <input id="username" placeholder="Username">
+            <input id="email" placeholder="Email">
+            <input id="password" type="password" placeholder="Password">
 
-    <section class="card">
-        <h2>Forecast</h2>
-        <button onclick="startForecast()">Start forecast</button>
-        <pre id="forecast"></pre>
-    </section>
+            <div class="buttons">
+                <button onclick="registerUser()">Register</button>
+                <button onclick="loginUser()">Login</button>
+                <button class="secondary" onclick="logoutUser()">Logout</button>
+            </div>
+
+            <pre id="authResult"></pre>
+        </section>
+
+        <section class="card" id="categories">
+            <h3>📂 Створити категорію</h3>
+            <input id="categoryName" placeholder="Наприклад: Food">
+            <button onclick="createCategory()">Create Category</button>
+            <pre id="categoryResult"></pre>
+        </section>
+
+        <section class="card" id="transactions">
+            <h3>💳 Створити транзакцію</h3>
+            <input id="title" placeholder="Title">
+            <input id="amount" type="number" placeholder="Amount">
+            <select id="type">
+                <option value="expense">expense</option>
+                <option value="income">income</option>
+            </select>
+            <input id="categoryId" type="number" placeholder="Category ID">
+            <button onclick="createTransaction()">Create Transaction</button>
+            <pre id="transactionResult"></pre>
+        </section>
+
+        <section class="card" id="list">
+            <h3>📄 Мої транзакції</h3>
+            <div class="buttons">
+                <button onclick="getTransactions()">Load Transactions</button>
+                <button onclick="getExpenseTransactions()">Only Expenses</button>
+            </div>
+            <pre id="transactionsResult"></pre>
+        </section>
+
+        <section class="card" id="analytics">
+            <h3>📊 Аналітика</h3>
+            <div class="buttons">
+                <button onclick="getStats()">Stats by Category</button>
+                <button onclick="getBalance()">Balance</button>
+            </div>
+            <pre id="analyticsResult"></pre>
+        </section>
+
+        <section class="card" id="forecast">
+            <h3>🤖 Прогноз витрат</h3>
+            <button onclick="startForecast()">Start Forecast</button>
+            <pre id="forecastResult"></pre>
+        </section>
+    </main>
 </div>
 
 <script src="app.js"></script>

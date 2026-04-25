@@ -1,27 +1,103 @@
 const API_URL = "http://localhost:8000";
-let token = "";
+let token = localStorage.getItem("token") || "";
 
-async function login() {
+updateAuthStatus();
+
+function show(elementId, data) {
+    document.getElementById(elementId).innerText =
+        typeof data === "string" ? data : JSON.stringify(data, null, 2);
+}
+
+function updateAuthStatus() {
+    document.getElementById("authStatus").innerText =
+        token ? "Авторизовано" : "Не авторизовано";
+}
+
+function getAuthHeaders() {
+    return {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+    };
+}
+
+async function request(url, options = {}) {
+    try {
+        const response = await fetch(url, options);
+        const text = await response.text();
+
+        let data;
+        try {
+            data = text ? JSON.parse(text) : {};
+        } catch {
+            data = text;
+        }
+
+        if (!response.ok) {
+            return {
+                error: true,
+                status: response.status,
+                data
+            };
+        }
+
+        return {
+            error: false,
+            status: response.status,
+            data
+        };
+    } catch (error) {
+        return {
+            error: true,
+            status: "NETWORK_ERROR",
+            data: error.message
+        };
+    }
+}
+
+async function registerUser() {
     const data = {
         username: document.getElementById("username").value,
         email: document.getElementById("email").value,
         password: document.getElementById("password").value
     };
 
-    const response = await fetch(`${API_URL}/auth/login`, {
+    const result = await request(`${API_URL}/auth/register`, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(data)
     });
 
-    const result = await response.json();
+    show("authResult", result.error ? result : "Registration successful. Now click Login.");
+}
 
-    if (response.ok) {
-        token = result.access_token;
-        document.getElementById("loginResult").innerText = "Login successful";
+async function loginUser() {
+    const data = {
+        username: document.getElementById("username").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value
+    };
+
+    const result = await request(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+    });
+
+    if (!result.error) {
+        token = result.data.access_token;
+        localStorage.setItem("token", token);
+        updateAuthStatus();
+        show("authResult", "Login successful.");
     } else {
-        document.getElementById("loginResult").innerText = JSON.stringify(result);
+        show("authResult", result);
     }
+}
+
+function logoutUser() {
+    token = "";
+    localStorage.removeItem("token");
+    updateAuthStatus();
+    show("authResult", "Logged out.");
 }
 
 async function createCategory() {
@@ -29,16 +105,13 @@ async function createCategory() {
         name: document.getElementById("categoryName").value
     };
 
-    await fetch(`${API_URL}/categories/`, {
+    const result = await request(`${API_URL}/categories/`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify(data)
     });
 
-    alert("Category created");
+    show("categoryResult", result.data || result);
 }
 
 async function createTransaction() {
@@ -49,37 +122,68 @@ async function createTransaction() {
         category_id: Number(document.getElementById("categoryId").value)
     };
 
-    await fetch(`${API_URL}/transactions/`, {
+    const result = await request(`${API_URL}/transactions/`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-        },
+        headers: getAuthHeaders(),
         body: JSON.stringify(data)
     });
 
-    alert("Transaction created");
+    show("transactionResult", result.data || result);
 }
 
 async function getTransactions() {
-    const response = await fetch(`${API_URL}/transactions/`, {
-        headers: {
-            "Authorization": `Bearer ${token}`
-        }
+    const result = await request(`${API_URL}/transactions/`, {
+        headers: getAuthHeaders()
     });
 
-    const result = await response.json();
-    document.getElementById("transactions").innerText = JSON.stringify(result, null, 2);
+    show("transactionsResult", result.data || result);
+}
+
+async function getExpenseTransactions() {
+    const result = await request(`${API_URL}/transactions/?type=expense`, {
+        headers: getAuthHeaders()
+    });
+
+    show("transactionsResult", result.data || result);
+}
+
+async function getStats() {
+    const result = await request(`${API_URL}/transactions/stats/by-category`, {
+        headers: getAuthHeaders()
+    });
+
+    show("analyticsResult", result.data || result);
+}
+
+async function getBalance() {
+    const result = await request(`${API_URL}/analytics/balance`, {
+        headers: getAuthHeaders()
+    });
+
+    show("analyticsResult", result.data || result);
 }
 
 async function startForecast() {
-    const response = await fetch(`${API_URL}/forecast/expenses`, {
+    const start = await request(`${API_URL}/forecast/expenses`, {
         method: "POST",
-        headers: {
-            "Authorization": `Bearer ${token}`
-        }
+        headers: getAuthHeaders()
     });
 
-    const result = await response.json();
-    document.getElementById("forecast").innerText = JSON.stringify(result, null, 2);
+    if (start.error) {
+        show("forecastResult", start);
+        return;
+    }
+
+    show("forecastResult", {
+        message: "Forecast task started",
+        task_id: start.data.task_id
+    });
+
+    setTimeout(async () => {
+        const result = await request(`${API_URL}/forecast/expenses/${start.data.task_id}`, {
+            headers: getAuthHeaders()
+        });
+
+        show("forecastResult", result.data || result);
+    }, 1500);
 }
