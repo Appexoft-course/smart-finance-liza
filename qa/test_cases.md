@@ -1,48 +1,96 @@
-# Test Cases
+# Test Cases — Smart Finance API
 
-## TC-01 Register user
-Steps:
-1. POST /auth/register
-2. Valid body
+## TC-01 Register User
+**Precondition:** API is running.  
+**Steps:**
+1. Send POST `/auth/register`
+2. Provide username, email, password
 
-Expected:
-201 Created
+**Expected Result:**  
+User is created successfully.
 
-## TC-02 Login
-Steps:
-1. POST /auth/login
-2. Valid credentials
+---
 
-Expected:
-200 + access_token
+## TC-02 Login User
+**Precondition:** User exists.  
+**Steps:**
+1. Send POST `/auth/login`
+2. Provide valid credentials
 
-## TC-03 Unauthorized access
-Steps:
-1. GET /transactions/
+**Expected Result:**  
+API returns `access_token`.
 
-Expected:
-401 Unauthorized
+---
 
-## TC-04 Create transaction
-Steps:
-1. Authorize
-2. POST /transactions/
+## TC-03 Get Current User
+**Precondition:** User is logged in.  
+**Steps:**
+1. Authorize with JWT token
+2. Send GET `/auth/me`
 
-Expected:
-201 Created
+**Expected Result:**  
+Current user data is returned.
 
-## TC-05 Data isolation
-Steps:
-1. User A creates transaction
-2. User B requests list
+---
 
-Expected:
-User B does NOT see A data
+## TC-04 Unauthorized Transactions Request
+**Steps:**
+1. Send GET `/transactions/` without token
 
-## TC-06 Forecast
-Steps:
-1. POST /forecast/expenses
-2. GET result
+**Expected Result:**  
+API returns `401 Unauthorized`.
 
-Expected:
-SUCCESS + result
+---
+
+## TC-05 Create Category
+**Precondition:** User is authorized.  
+**Steps:**
+1. Send POST `/categories/`
+2. Provide category name
+
+**Expected Result:**  
+Category is created.
+
+---
+
+## TC-06 Create Transaction
+**Precondition:** User is authorized and category exists.  
+**Steps:**
+1. Send POST `/transactions/`
+2. Provide title, amount, type, category_id
+
+**Expected Result:**  
+Transaction is created.
+
+---
+
+## TC-07 Update Transaction
+**Precondition:** Transaction exists.  
+**Steps:**
+1. Send PUT `/transactions/{id}`
+2. Provide updated data
+
+**Expected Result:**  
+Transaction is updated.
+
+---
+
+## TC-08 Delete Transaction
+**Precondition:** Transaction exists.  
+**Steps:**
+1. Send DELETE `/transactions/{id}`
+
+**Expected Result:**  
+Transaction is deleted.
+
+---
+
+## TC-09 Forecast Task
+**Precondition:** User has expense transactions.  
+**Steps:**
+1. Send POST `/forecast/expenses`
+2. Copy task_id
+3. Send GET `/forecast/expenses/{task_id}`
+
+**Expected Result:**  
+Forecast result is returned.

@@ -173,6 +173,13 @@ smart_finance_celery
 ```text
 http://localhost:8000/docs
 ```
+### 6.Testing
+
+Run tests:
+
+```bash
+pytest
+```
 ## Main API Endpoints
 ### Auth
 ```text

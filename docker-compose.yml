@@ -39,5 +39,15 @@ services:
       - redis
       - db
 
+  nginx:
+    image: nginx:latest
+    container_name: smart_finance_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - web
+
 volumes:
   finance_postgres_data:

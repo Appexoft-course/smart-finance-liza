@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Finance</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+    <h1>Smart Finance</h1>
+    <p>Personal finance dashboard</p>
+
+    <section class="card">
+        <h2>Login</h2>
+        <input id="username" placeholder="Username">
+        <input id="email" placeholder="Email">
+        <input id="password" type="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p id="loginResult"></p>
+    </section>
+
+    <section class="card">
+        <h2>Create Category</h2>
+        <input id="categoryName" placeholder="Category name">
+        <button onclick="createCategory()">Create</button>
+    </section>
+
+    <section class="card">
+        <h2>Create Transaction</h2>
+        <input id="title" placeholder="Title">
+        <input id="amount" type="number" placeholder="Amount">
+        <input id="type" placeholder="income / expense">
+        <input id="categoryId" type="number" placeholder="Category ID">
+        <button onclick="createTransaction()">Create</button>
+    </section>
+
+    <section class="card">
+        <h2>Transactions</h2>
+        <button onclick="getTransactions()">Load transactions</button>
+        <pre id="transactions"></pre>
+    </section>
+
+    <section class="card">
+        <h2>Forecast</h2>
+        <button onclick="startForecast()">Start forecast</button>
+        <pre id="forecast"></pre>
+    </section>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

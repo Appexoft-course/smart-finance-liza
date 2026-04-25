@@ -1,31 +1,53 @@
 # Test Plan — Smart Finance API
 
+## Project
+Smart Finance API — backend service for personal finance management, expense analytics and forecasting.
+
 ## Scope
-- Auth (register, login, /auth/me)
+Testing covers:
+- Authentication
 - Categories
-- Transactions (CRUD, filters)
-- Forecast (Celery)
+- Transactions
+- Filters
+- Analytics
+- Forecast with Celery
+- Authorization and user data isolation
 
-## Out of scope
-- Frontend
+## Out of Scope
+- UI design testing
+- Performance testing
+- Mobile testing
 
-## Test types
+## Test Types
 - Functional API testing
-- Security (auth required)
 - Negative testing
+- Security testing
+- Regression testing
+- Smoke testing
 
-## Environments
-- Local (Docker): web, db, redis, celery
+## Environment
+- FastAPI
+- PostgreSQL
+- Redis
+- Celery
+- Docker Compose
+- Swagger UI
+- Pytest
 
-## Entry criteria
-- Services up (docker compose ps = all Up)
-- Swagger доступний
+## Entry Criteria
+- Docker containers are running
+- API is available at `http://localhost:8000/docs`
+- Database connection works
+- Redis and Celery worker are running
 
-## Exit criteria
-- Critical bugs fixed
-- Core flows pass
+## Exit Criteria
+- Critical API endpoints work correctly
+- Authentication works
+- Protected endpoints reject unauthorized users
+- Core pytest tests pass
 
 ## Risks
-- Token handling errors
-- Data isolation bugs
-- Async task delays
+- Incorrect JWT handling
+- User data isolation bugs
+- Celery task delay
+- Database connection issues
