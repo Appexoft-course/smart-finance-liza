@@ -275,3 +275,20 @@ This project is also planned as a QA portfolio project. It will include:
 - GitHub Actions CI
 - Better error handling
 - Alembic migrations
+# Java API Automation Tests
+This folder contains Java API automation tests for Smart Finance API.
+## Tech Stack
+- Java
+- JUnit 5
+- RestAssured
+- Maven
+## How to Run
+Make sure Smart Finance API is running:
+
+```bash
+docker compose up -d
+```
+### Then run:
+```bash
+mvn test
+```
