@@ -2,93 +2,153 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Smart Finance Pro</title>
+    <title>Smart Finance</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="app">
-    <aside class="sidebar">
-        <h1>Finance Pro</h1>
-        <p class="subtitle">Smart Finance API</p>
+<div class="layout">
+    <aside class="sidebar" id="sidebar">
+        <div class="brand">
+            <div class="logo">SF</div>
+            <div>
+                <h1>Smart Finance</h1>
+                <p>Personal finance system</p>
+            </div>
+        </div>
 
-        <nav>
-            <a href="#auth">🔐 Авторизація</a>
-            <a href="#categories">📂 Категорії</a>
-            <a href="#transactions">💳 Транзакції</a>
-            <a href="#list">📄 Список</a>
-            <a href="#analytics">📊 Аналітика</a>
-            <a href="#forecast">🤖 Прогноз</a>
+        <nav class="menu">
+            <button onclick="showPage('dashboard')">Dashboard</button>
+            <button onclick="showPage('auth')">Authorization</button>
+            <button onclick="showPage('categories')">Categories</button>
+            <button onclick="showPage('transactions')">Transactions</button>
+            <button onclick="showPage('analytics')">Analytics</button>
+            <button onclick="showPage('forecast')">Forecast</button>
         </nav>
 
-        <div class="token-box">
-            <p>Статус:</p>
-            <strong id="authStatus">Не авторизовано</strong>
+        <div class="sidebar-footer">
+            <span>Status</span>
+            <strong id="authStatus">Not authorized</strong>
         </div>
     </aside>
 
-    <main class="content">
-        <section class="hero">
-            <h2>Smart Finance Dashboard</h2>
-            <p>Особисті фінанси, транзакції, аналітика та прогноз витрат</p>
-        </section>
+    <main class="main">
+        <header class="topbar">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <div>
+                <h2 id="pageTitle">Dashboard</h2>
+                <p>Manage expenses, categories and forecasts</p>
+            </div>
+        </header>
 
-        <section class="card" id="auth">
-            <h3>🔐 Авторизація</h3>
-            <input id="username" placeholder="Username">
-            <input id="email" placeholder="Email">
-            <input id="password" type="password" placeholder="Password">
-
-            <div class="buttons">
-                <button onclick="registerUser()">Register</button>
-                <button onclick="loginUser()">Login</button>
-                <button class="secondary" onclick="logoutUser()">Logout</button>
+        <section class="page active" id="dashboard">
+            <div class="hero-card">
+                <h2>Welcome to Smart Finance</h2>
+                <p>
+                    A personal finance management platform with transactions,
+                    analytics and expense forecasting.
+                </p>
+                <button onclick="showPage('auth')">Get started</button>
             </div>
 
-            <pre id="authResult"></pre>
-        </section>
-
-        <section class="card" id="categories">
-            <h3>📂 Створити категорію</h3>
-            <input id="categoryName" placeholder="Наприклад: Food">
-            <button onclick="createCategory()">Create Category</button>
-            <pre id="categoryResult"></pre>
-        </section>
-
-        <section class="card" id="transactions">
-            <h3>💳 Створити транзакцію</h3>
-            <input id="title" placeholder="Title">
-            <input id="amount" type="number" placeholder="Amount">
-            <select id="type">
-                <option value="expense">expense</option>
-                <option value="income">income</option>
-            </select>
-            <input id="categoryId" type="number" placeholder="Category ID">
-            <button onclick="createTransaction()">Create Transaction</button>
-            <pre id="transactionResult"></pre>
-        </section>
-
-        <section class="card" id="list">
-            <h3>📄 Мої транзакції</h3>
-            <div class="buttons">
-                <button onclick="getTransactions()">Load Transactions</button>
-                <button onclick="getExpenseTransactions()">Only Expenses</button>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span>API</span>
+                    <strong>FastAPI</strong>
+                </div>
+                <div class="stat-card">
+                    <span>Database</span>
+                    <strong>PostgreSQL</strong>
+                </div>
+                <div class="stat-card">
+                    <span>Background tasks</span>
+                    <strong>Celery + Redis</strong>
+                </div>
             </div>
-            <pre id="transactionsResult"></pre>
         </section>
 
-        <section class="card" id="analytics">
-            <h3>📊 Аналітика</h3>
-            <div class="buttons">
-                <button onclick="getStats()">Stats by Category</button>
-                <button onclick="getBalance()">Balance</button>
+        <section class="page" id="auth">
+            <div class="content-card auth-card">
+                <h3>Create account or login</h3>
+                <p class="muted">Register first, then login to receive access token.</p>
+
+                <input id="username" placeholder="Username">
+                <input id="email" placeholder="Email">
+                <input id="password" type="password" placeholder="Password">
+
+                <div class="actions">
+                    <button onclick="registerUser()">Register</button>
+                    <button onclick="loginUser()">Login</button>
+                    <button class="danger" onclick="logoutUser()">Logout</button>
+                </div>
+
+                <pre id="authResult"></pre>
             </div>
-            <pre id="analyticsResult"></pre>
         </section>
 
-        <section class="card" id="forecast">
-            <h3>🤖 Прогноз витрат</h3>
-            <button onclick="startForecast()">Start Forecast</button>
-            <pre id="forecastResult"></pre>
+        <section class="page" id="categories">
+            <div class="content-card">
+                <h3>Create category</h3>
+                <p class="muted">Example: Food, Transport, Salary, Shopping.</p>
+
+                <input id="categoryName" placeholder="Category name">
+                <button onclick="createCategory()">Create Category</button>
+
+                <pre id="categoryResult"></pre>
+            </div>
+        </section>
+
+        <section class="page" id="transactions">
+            <div class="content-card">
+                <h3>Create transaction</h3>
+
+                <input id="title" placeholder="Transaction title">
+                <input id="amount" type="number" placeholder="Amount">
+
+                <select id="type">
+                    <option value="expense">Expense</option>
+                    <option value="income">Income</option>
+                </select>
+
+                <input id="categoryId" type="number" placeholder="Category ID">
+
+                <button onclick="createTransaction()">Create Transaction</button>
+
+                <pre id="transactionResult"></pre>
+            </div>
+
+            <div class="content-card">
+                <h3>My transactions</h3>
+                <div class="actions">
+                    <button onclick="getTransactions()">Load All</button>
+                    <button onclick="getExpenseTransactions()">Only Expenses</button>
+                </div>
+                <pre id="transactionsResult"></pre>
+            </div>
+        </section>
+
+        <section class="page" id="analytics">
+            <div class="content-card">
+                <h3>Analytics</h3>
+                <p class="muted">View expense statistics and balance.</p>
+
+                <div class="actions">
+                    <button onclick="getStats()">Expenses by Category</button>
+                    <button onclick="getBalance()">Balance</button>
+                </div>
+
+                <pre id="analyticsResult"></pre>
+            </div>
+        </section>
+
+        <section class="page" id="forecast">
+            <div class="content-card">
+                <h3>Expense forecast</h3>
+                <p class="muted">Run background task using Celery and Redis.</p>
+
+                <button onclick="startForecast()">Start Forecast</button>
+
+                <pre id="forecastResult"></pre>
+            </div>
         </section>
     </main>
 </div>
