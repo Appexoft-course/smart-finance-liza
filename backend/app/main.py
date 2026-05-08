@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from sqlalchemy import text
 
+from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine
 from app.core.dependencies import get_db
 from app.models import user, category, transaction
@@ -12,6 +13,20 @@ app = FastAPI(
     description="API for personal finance management and expense forecasting",
     version="0.1.0",
 )
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5500",
+        "http://127.0.0.1:5500",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 app.add_middleware(
     CORSMiddleware,

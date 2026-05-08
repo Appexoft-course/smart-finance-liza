@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Smart Finance</title>
@@ -33,7 +33,14 @@
 
     <main class="main">
         <header class="topbar">
-            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <button class="menu-toggle"
+                    aria-label="Toggle sidebar"
+                    aria-controls="sidebar"
+                    aria-expanded="false"
+                    onclick="toggleSidebar(); this.setAttribute('aria-expanded', this.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');">
+                ☰
+            </button>
+
             <div>
                 <h2 id="pageTitle">Dashboard</h2>
                 <p>Manage expenses, categories and forecasts</p>
