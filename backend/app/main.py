@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from sqlalchemy import text
 
-from fastapi.middleware.cors import CORSMiddleware
 from app.database import Base, engine
 from app.core.dependencies import get_db
 from app.models import user, category, transaction
@@ -27,14 +26,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 app.include_router(auth.router)
 app.include_router(categories.router)
