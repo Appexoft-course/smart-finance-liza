@@ -187,3 +187,29 @@ async function startForecast() {
         show("forecastResult", result.data || result);
     }, 1500);
 }
+
+function showPage(pageId) {
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
+
+    document.getElementById(pageId).classList.add("active");
+
+    const titles = {
+        dashboard: "Dashboard",
+        auth: "Authorization",
+        categories: "Categories",
+        transactions: "Transactions",
+        analytics: "Analytics",
+        forecast: "Forecast"
+    };
+
+    document.getElementById("pageTitle").innerText = titles[pageId] || "Dashboard";
+
+    const sidebar = document.getElementById("sidebar");
+    sidebar.classList.remove("open");
+}
+
+function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("open");
+}
